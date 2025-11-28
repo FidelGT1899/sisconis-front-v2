@@ -1,0 +1,205 @@
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+import type { User } from '@users/domain/entities/User'
+import type { Role } from '@users/domain/entities/Role'
+import type { Area } from '@users/domain/entities/Area'
+import type { Department } from '@users/domain/entities/Department'
+
+import {
+    getAllUsersUseCase,
+    createUserUseCase,
+    updateUserUseCase,
+    deleteUserUseCase,
+    deleteManyUsersUseCase,
+} from '@users/infrastructure/userModule'
+
+export const useUsersStore = defineStore('users', () => {
+    const users = ref<User[]>([])
+    const roles = ref<Role[]>([])
+    const areas = ref<Area[]>([])
+    const departments = ref<Department[]>([])
+
+    const loading = ref(false)
+    const error = ref<string | null>(null)
+
+    const searchTerm = ref('')
+    const page = ref(1)
+    const pageSize = ref(5)
+
+    function loadRelatedDataFromSession() {
+        if (typeof window === 'undefined') return
+        roles.value = JSON.parse(sessionStorage.getItem('sisconis.roles') ?? '[]')
+        areas.value = JSON.parse(sessionStorage.getItem('sisconis.areas') ?? '[]')
+        departments.value = JSON.parse(
+            sessionStorage.getItem('sisconis.departments') ?? '[]',
+        )
+    }
+
+    const filteredUsers = computed<User[]>(() => {
+        if (!searchTerm.value) return users.value
+
+        const term = searchTerm.value.toLowerCase().trim()
+
+        return users.value.filter(u => {
+            const area = areas.value.find(a => a.id === u.areaId)
+            const role = roles.value.find(r => r.id === u.roleId)
+            const dept = area
+                ? departments.value.find(d => d.id === area.departmentId)
+                : undefined
+
+            const target = [
+                u.name,
+                u.lastname,
+                u.email,
+                role?.name ?? '',
+                area?.name ?? '',
+                dept?.name ?? '',
+            ]
+                .join(' ')
+                .toLowerCase()
+
+            return target.includes(term)
+        })
+    })
+
+    const totalItems = computed(() => filteredUsers.value.length)
+
+    const paginatedUsers = computed<User[]>(() => {
+        const start = (page.value - 1) * pageSize.value
+        return filteredUsers.value.slice(start, start + pageSize.value)
+    })
+
+    const totalPages = computed(() => {
+        if (pageSize.value <= 0) return 1
+        return Math.max(1, Math.ceil(totalItems.value / pageSize.value))
+    })
+
+    async function loadUsers() {
+        loading.value = true
+        error.value = null
+        try {
+            users.value = await getAllUsersUseCase.execute()
+            loadRelatedDataFromSession()
+            // console.log('USERS STORE', users.value)
+        } catch (e: any) {
+            console.error(e)
+            error.value = e?.message ?? 'Error cargando usuarios'
+        } finally {
+            loading.value = false
+        }
+    }
+
+    function setPage(newPage: number) {
+        const safe = Math.min(Math.max(newPage, 1), totalPages.value)
+        page.value = safe
+    }
+
+    function search(term: string) {
+        searchTerm.value = term
+    }
+
+    async function createUser(payload: {
+        name: string
+        lastname: string
+        email: string
+        roleId: string
+        areaId: string
+        password: string
+    }) {
+        loading.value = true
+        error.value = null
+        try {
+            await createUserUseCase.execute(payload)
+            await loadUsers()
+        } catch (e: any) {
+            console.error(e)
+            error.value = e?.message ?? 'Error creando usuario'
+            throw e
+        } finally {
+            loading.value = false
+        }
+    }
+
+    async function updateUser(payload: {
+        id: string
+        name: string
+        lastname: string
+        email: string
+        roleId: string
+        areaId: string
+        password?: string
+    }) {
+        loading.value = true
+        error.value = null
+        try {
+            await updateUserUseCase.execute(payload)
+            await loadUsers()
+        } catch (e: any) {
+            console.error(e)
+            error.value = e?.message ?? 'Error actualizando usuario'
+            throw e
+        } finally {
+            loading.value = false
+        }
+    }
+
+    async function deleteOne(id: string) {
+        loading.value = true
+        error.value = null
+        try {
+            await deleteUserUseCase.execute(id)
+            await loadUsers()
+        } catch (e: any) {
+            console.error(e)
+            error.value = e?.message ?? 'Error eliminando usuario'
+            throw e
+        } finally {
+            loading.value = false
+        }
+    }
+
+    async function deleteMany(ids: string[]) {
+        if (!ids.length) return
+        loading.value = true
+        error.value = null
+        try {
+            await deleteManyUsersUseCase.execute(ids)
+            await loadUsers()
+        } catch (e: any) {
+            console.error(e)
+            error.value = e?.message ?? 'Error eliminando usuarios'
+            throw e
+        } finally {
+            loading.value = false
+        }
+    }
+
+    return {
+        // state
+        users,
+        roles,
+        areas,
+        departments,
+        loading,
+        error,
+        searchTerm,
+        page,
+        pageSize,
+
+        // getters
+        filteredUsers,
+        paginatedUsers,
+        totalItems,
+        totalPages,
+
+        // actions
+        loadUsers,
+        setPage,
+        search,
+        createUser,
+        updateUser,
+        deleteOne,
+        deleteMany,
+    }
+})
