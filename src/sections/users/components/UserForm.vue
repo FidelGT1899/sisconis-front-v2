@@ -29,11 +29,21 @@ const error = ref<string | null>(null)
 
 function open() {
     error.value = null
+    resetForm()
     dialogRef.value?.showModal()
 }
 
 function close() {
     dialogRef.value?.close()
+}
+
+function resetForm() {
+    name.value = ''
+    lastname.value = ''
+    email.value = ''
+    password.value = ''
+    roleId.value = props.roles[0]?.id ?? 'role-1'
+    areaId.value = props.areas[0]?.id ?? 'area-1'
 }
 
 defineExpose({ open })
@@ -51,6 +61,7 @@ async function handleSubmit() {
             password: password.value,
         })
         emit('created')
+        resetForm()
         close()
     } catch (e) {
         error.value = mapUserErrorToMessage(e)

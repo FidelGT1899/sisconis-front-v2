@@ -77,7 +77,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="min-h-screen">
+    <div class="min-h-[85vh]">
         <div class="mb-4">
             <h2 class="text-2xl font-bold">Usuarios</h2>
 

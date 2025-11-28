@@ -5,6 +5,7 @@ import type { User } from '@users/domain/entities/User'
 import type { Role } from '@users/domain/entities/Role'
 import type { Area } from '@users/domain/entities/Area'
 import type { Department } from '@users/domain/entities/Department'
+import { useNotificationsStore } from '@store/ui/useNotificationsStore'
 
 import {
     getAllUsersUseCase,
@@ -15,6 +16,8 @@ import {
 } from '@users/infrastructure/userModule'
 
 export const useUsersStore = defineStore('users', () => {
+    const notifications = useNotificationsStore()
+
     const users = ref<User[]>([])
     const roles = ref<Role[]>([])
     const areas = ref<Area[]>([])
@@ -25,7 +28,7 @@ export const useUsersStore = defineStore('users', () => {
 
     const searchTerm = ref('')
     const page = ref(1)
-    const pageSize = ref(5)
+    const pageSize = ref(8)
 
     function loadRelatedDataFromSession() {
         if (typeof window === 'undefined') return
@@ -112,9 +115,10 @@ export const useUsersStore = defineStore('users', () => {
         try {
             await createUserUseCase.execute(payload)
             await loadUsers()
+            notifications.success('Usuario creado correctamente 🎉', { withConfetti: true })
         } catch (e: any) {
-            console.error(e)
-            error.value = e?.message ?? 'Error creando usuario'
+            const msg = e?.message ?? 'Error creando usuario'
+            notifications.error(msg)
             throw e
         } finally {
             loading.value = false
@@ -135,9 +139,10 @@ export const useUsersStore = defineStore('users', () => {
         try {
             await updateUserUseCase.execute(payload)
             await loadUsers()
+            notifications.success('Usuario actualizado correctamente 🎉', { withConfetti: true })
         } catch (e: any) {
-            console.error(e)
-            error.value = e?.message ?? 'Error actualizando usuario'
+            const msg = e?.message ?? 'Error actualizando usuario'
+            notifications.error(msg)
             throw e
         } finally {
             loading.value = false
@@ -150,9 +155,11 @@ export const useUsersStore = defineStore('users', () => {
         try {
             await deleteUserUseCase.execute(id)
             await loadUsers()
+            notifications.success('Usuario eliminado 🎉', { withConfetti: true })
         } catch (e: any) {
             console.error(e)
-            error.value = e?.message ?? 'Error eliminando usuario'
+            const msg = e?.message ?? 'Error eliminando usuario'
+            notifications.error(msg)
             throw e
         } finally {
             loading.value = false
@@ -166,9 +173,11 @@ export const useUsersStore = defineStore('users', () => {
         try {
             await deleteManyUsersUseCase.execute(ids)
             await loadUsers()
+            notifications.success(`Se eliminaron ${ids.length} usuarios`)
         } catch (e: any) {
             console.error(e)
-            error.value = e?.message ?? 'Error eliminando usuarios'
+            const msg = e?.message ?? 'Error eliminando usuarios'
+            notifications.error(msg)
             throw e
         } finally {
             loading.value = false
