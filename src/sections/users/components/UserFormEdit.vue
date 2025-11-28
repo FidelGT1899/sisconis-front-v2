@@ -3,7 +3,6 @@ import { ref, watch } from 'vue'
 import type { User } from '@users/domain/entities/User'
 import type { Role } from '@users/domain/entities/Role'
 import type { Area } from '@users/domain/entities/Area'
-import { updateUserUseCase } from '@users/infrastructure/userModule'
 import { useUsersStore } from '@/stores/users/useUsersStore'
 
 const props = defineProps<{
@@ -77,9 +76,16 @@ async function handleSubmit() {
 
         emit('updated')
         close()
-    } catch (e: any) {
+    } catch (e: unknown) {
         console.error(e)
-        error.value = e?.message ?? 'Error actualizando usuario'
+
+        // obtener mensaje sin usar any
+        const msg =
+            e instanceof Error && e.message
+                ? e.message
+                : 'Error actualizando usuario'
+
+        error.value = msg
     } finally {
         loading.value = false
     }

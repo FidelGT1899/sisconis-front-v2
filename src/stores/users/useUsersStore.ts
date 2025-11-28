@@ -15,6 +15,14 @@ import {
     deleteManyUsersUseCase,
 } from '@users/infrastructure/userModule'
 
+// helper para no repetir lógica en los catch
+function getErrorMessage(error: unknown, fallback: string): string {
+    if (error instanceof Error && error.message) {
+        return error.message
+    }
+    return fallback
+}
+
 export const useUsersStore = defineStore('users', () => {
     const notifications = useNotificationsStore()
 
@@ -84,10 +92,9 @@ export const useUsersStore = defineStore('users', () => {
         try {
             users.value = await getAllUsersUseCase.execute()
             loadRelatedDataFromSession()
-            // console.log('USERS STORE', users.value)
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error(e)
-            error.value = e?.message ?? 'Error cargando usuarios'
+            error.value = getErrorMessage(e, 'Error cargando usuarios')
         } finally {
             loading.value = false
         }
@@ -116,8 +123,8 @@ export const useUsersStore = defineStore('users', () => {
             await createUserUseCase.execute(payload)
             await loadUsers()
             notifications.success('Usuario creado correctamente 🎉', { withConfetti: true })
-        } catch (e: any) {
-            const msg = e?.message ?? 'Error creando usuario'
+        } catch (e: unknown) {
+            const msg = getErrorMessage(e, 'Error creando usuario')
             notifications.error(msg)
             throw e
         } finally {
@@ -140,8 +147,8 @@ export const useUsersStore = defineStore('users', () => {
             await updateUserUseCase.execute(payload)
             await loadUsers()
             notifications.success('Usuario actualizado correctamente 🎉', { withConfetti: true })
-        } catch (e: any) {
-            const msg = e?.message ?? 'Error actualizando usuario'
+        } catch (e: unknown) {
+            const msg = getErrorMessage(e, 'Error actualizando usuario')
             notifications.error(msg)
             throw e
         } finally {
@@ -156,9 +163,9 @@ export const useUsersStore = defineStore('users', () => {
             await deleteUserUseCase.execute(id)
             await loadUsers()
             notifications.success('Usuario eliminado 🎉', { withConfetti: true })
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error(e)
-            const msg = e?.message ?? 'Error eliminando usuario'
+            const msg = getErrorMessage(e, 'Error eliminando usuario')
             notifications.error(msg)
             throw e
         } finally {
@@ -174,9 +181,9 @@ export const useUsersStore = defineStore('users', () => {
             await deleteManyUsersUseCase.execute(ids)
             await loadUsers()
             notifications.success(`Se eliminaron ${ids.length} usuarios`)
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error(e)
-            const msg = e?.message ?? 'Error eliminando usuarios'
+            const msg = getErrorMessage(e, 'Error eliminando usuarios')
             notifications.error(msg)
             throw e
         } finally {
