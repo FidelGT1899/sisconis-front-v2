@@ -2,7 +2,7 @@ import type { User } from '@/modules/users/domain/entities/User'
 import type { Role } from '@/modules/users/domain/entities/Role'
 import type { Area } from '@/modules/users/domain/entities/Area'
 import type { Department } from '@/modules/users/domain/entities/Department'
-import type { UserListItemDTO } from '../dtos/userListItemDTO'
+import type { UserListItemDTO } from '../dtos/UserListItemDTO'
 
 export class UserListMapper {
     static map(
