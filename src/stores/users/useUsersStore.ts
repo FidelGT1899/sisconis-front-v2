@@ -5,6 +5,7 @@ import type { User } from '@users/domain/entities/User'
 import type { Role } from '@users/domain/entities/Role'
 import type { Area } from '@users/domain/entities/Area'
 import type { Department } from '@users/domain/entities/Department'
+import { useNotificationsStore } from '@store/ui/useNotificationsStore'
 
 import {
     getAllUsersUseCase,
@@ -14,7 +15,17 @@ import {
     deleteManyUsersUseCase,
 } from '@users/infrastructure/userModule'
 
+// helper para no repetir lógica en los catch
+function getErrorMessage(error: unknown, fallback: string): string {
+    if (error instanceof Error && error.message) {
+        return error.message
+    }
+    return fallback
+}
+
 export const useUsersStore = defineStore('users', () => {
+    const notifications = useNotificationsStore()
+
     const users = ref<User[]>([])
     const roles = ref<Role[]>([])
     const areas = ref<Area[]>([])
@@ -25,7 +36,7 @@ export const useUsersStore = defineStore('users', () => {
 
     const searchTerm = ref('')
     const page = ref(1)
-    const pageSize = ref(5)
+    const pageSize = ref(8)
 
     function loadRelatedDataFromSession() {
         if (typeof window === 'undefined') return
@@ -81,10 +92,9 @@ export const useUsersStore = defineStore('users', () => {
         try {
             users.value = await getAllUsersUseCase.execute()
             loadRelatedDataFromSession()
-            // console.log('USERS STORE', users.value)
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error(e)
-            error.value = e?.message ?? 'Error cargando usuarios'
+            error.value = getErrorMessage(e, 'Error cargando usuarios')
         } finally {
             loading.value = false
         }
@@ -112,9 +122,10 @@ export const useUsersStore = defineStore('users', () => {
         try {
             await createUserUseCase.execute(payload)
             await loadUsers()
-        } catch (e: any) {
-            console.error(e)
-            error.value = e?.message ?? 'Error creando usuario'
+            notifications.success('Usuario creado correctamente 🎉', { withConfetti: true })
+        } catch (e: unknown) {
+            const msg = getErrorMessage(e, 'Error creando usuario')
+            notifications.error(msg)
             throw e
         } finally {
             loading.value = false
@@ -135,9 +146,10 @@ export const useUsersStore = defineStore('users', () => {
         try {
             await updateUserUseCase.execute(payload)
             await loadUsers()
-        } catch (e: any) {
-            console.error(e)
-            error.value = e?.message ?? 'Error actualizando usuario'
+            notifications.success('Usuario actualizado correctamente 🎉', { withConfetti: true })
+        } catch (e: unknown) {
+            const msg = getErrorMessage(e, 'Error actualizando usuario')
+            notifications.error(msg)
             throw e
         } finally {
             loading.value = false
@@ -150,9 +162,11 @@ export const useUsersStore = defineStore('users', () => {
         try {
             await deleteUserUseCase.execute(id)
             await loadUsers()
-        } catch (e: any) {
+            notifications.success('Usuario eliminado 🎉', { withConfetti: true })
+        } catch (e: unknown) {
             console.error(e)
-            error.value = e?.message ?? 'Error eliminando usuario'
+            const msg = getErrorMessage(e, 'Error eliminando usuario')
+            notifications.error(msg)
             throw e
         } finally {
             loading.value = false
@@ -166,9 +180,11 @@ export const useUsersStore = defineStore('users', () => {
         try {
             await deleteManyUsersUseCase.execute(ids)
             await loadUsers()
-        } catch (e: any) {
+            notifications.success(`Se eliminaron ${ids.length} usuarios`)
+        } catch (e: unknown) {
             console.error(e)
-            error.value = e?.message ?? 'Error eliminando usuarios'
+            const msg = getErrorMessage(e, 'Error eliminando usuarios')
+            notifications.error(msg)
             throw e
         } finally {
             loading.value = false

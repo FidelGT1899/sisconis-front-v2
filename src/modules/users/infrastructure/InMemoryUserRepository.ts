@@ -8,7 +8,10 @@ import type { Department } from '@users/domain/entities/Department'
 const STORAGE_KEY = 'sisconis.users'
 
 function seedData(): User[] {
-  const roles: Role[] = [ /* ...igual... */]
+  const roles: Role[] = [
+    { id: 'role-1', name: 'Administrador', lvl_hierarchical: 1, config: true },
+    { id: 'role-2', name: 'Usuario', lvl_hierarchical: 2, config: false },
+  ]
 
   const departments: Department[] = [
     { id: 'dep-1', name: 'Tecnología' },
@@ -34,7 +37,7 @@ function seedData(): User[] {
 
   const users: User[] = [
     {
-      id: 'u-1',
+      id: 'aac41cab-7915-42e2-be44-c70c699691c2',
       name: 'Hart',
       lastname: 'Hagerty',
       email: 'hart.hagerty@example.com',
@@ -44,7 +47,67 @@ function seedData(): User[] {
       creation_date: new Date(),
     },
     {
-      id: 'u-2',
+      id: 'aac41cab-7915-42e2-be44-c70c699691c3',
+      name: 'Brice',
+      lastname: 'Swyre',
+      email: 'brice.swyre@example.com',
+      hashPass: '***',
+      roleId: 'role-2',
+      areaId: 'area-2',
+      creation_date: new Date(),
+    },
+    {
+      id: 'aac41cab-7915-42e2-be44-c70c699691c1',
+      name: 'Hart',
+      lastname: 'Hagerty',
+      email: 'hart.hagerty@example.com',
+      hashPass: '***',
+      roleId: 'role-1',
+      areaId: 'area-1',
+      creation_date: new Date(),
+    },
+    {
+      id: 'aac41cab-7915-42e2-be44-c70c699691c4',
+      name: 'Brice',
+      lastname: 'Swyre',
+      email: 'brice.swyre@example.com',
+      hashPass: '***',
+      roleId: 'role-2',
+      areaId: 'area-2',
+      creation_date: new Date(),
+    },
+    {
+      id: 'aac41cab-7915-42e2-be44-c70c699691c5',
+      name: 'Hart',
+      lastname: 'Hagerty',
+      email: 'hart.hagerty@example.com',
+      hashPass: '***',
+      roleId: 'role-1',
+      areaId: 'area-1',
+      creation_date: new Date(),
+    },
+    {
+      id: 'aac41cab-7915-42e2-be44-c70c699691c6',
+      name: 'Brice',
+      lastname: 'Swyre',
+      email: 'brice.swyre@example.com',
+      hashPass: '***',
+      roleId: 'role-2',
+      areaId: 'area-2',
+      creation_date: new Date(),
+    },
+    {
+      id: 'aac41cab-7915-42e2-be44-c70c699691c7',
+      name: 'Hart',
+      lastname: 'Hagerty',
+      email: 'hart.hagerty@example.com',
+      hashPass: '***',
+      roleId: 'role-1',
+      areaId: 'area-1',
+      creation_date: new Date(),
+    },
+    {
+      id: 'aac41cab-7915-42e2-be44-c70c699691c8',
       name: 'Brice',
       lastname: 'Swyre',
       email: 'brice.swyre@example.com',
