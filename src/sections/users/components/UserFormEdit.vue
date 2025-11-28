@@ -4,6 +4,7 @@ import type { User } from '@users/domain/entities/User'
 import type { Role } from '@users/domain/entities/Role'
 import type { Area } from '@users/domain/entities/Area'
 import { updateUserUseCase } from '@users/infrastructure/userModule'
+import { useUsersStore } from '@/stores/users/useUsersStore'
 
 const props = defineProps<{
     user: User | null
@@ -55,6 +56,7 @@ function close() {
 defineExpose({
     open,
 })
+const usersStore = useUsersStore()
 
 async function handleSubmit() {
     if (!props.user) return
@@ -63,7 +65,7 @@ async function handleSubmit() {
     error.value = null
 
     try {
-        await updateUserUseCase.execute({
+        await usersStore.updateUser({
             id: props.user.id,
             name: name.value,
             lastname: lastname.value,
@@ -82,6 +84,7 @@ async function handleSubmit() {
         loading.value = false
     }
 }
+
 </script>
 
 <template>

@@ -66,6 +66,7 @@ function toggleSelectAll(checked: boolean) {
 function handleDeleteSelected() {
     if (selectedIds.value.length === 0) return
     emit('deleteSelected', selectedIds.value)
+    selectedIds.value = []
 }
 
 // paginación

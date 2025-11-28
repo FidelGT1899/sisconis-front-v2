@@ -3,6 +3,8 @@ import { ref } from "vue";
 import { RouterView } from "vue-router";
 import Navbar from "./AppNavbar.vue";
 import Sidebar from "./AppSidebar.vue";
+import AppToasts from "./AppToasts.vue";
+import AppFooter from "./AppFooter.vue";
 
 const isSidebarPinned = ref(true); // abierto/expandido por defecto
 </script>
@@ -16,8 +18,10 @@ const isSidebarPinned = ref(true); // abierto/expandido por defecto
             <div class="p-4">
                 <RouterView />
             </div>
+            <AppFooter />
         </div>
 
         <Sidebar :pinned="isSidebarPinned" />
+        <AppToasts />
     </div>
 </template>
