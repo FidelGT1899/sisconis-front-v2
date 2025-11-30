@@ -1,7 +1,7 @@
 import type { User } from '@users/domain/entities/User'
 import type { UserRepository } from '@users/domain/repositories/UserRepository'
 import { ensureUserIsValid } from '@users/domain/entities/User'
-import { isUserPasswordValid, UserPasswordNotValidError } from '../../domain/validations/UserPassword'
+import { isUserPasswordValid, UserPasswordNotValidError } from '@users/domain/validations/UserPassword'
 
 export interface CreateUserCommand {
   name: string

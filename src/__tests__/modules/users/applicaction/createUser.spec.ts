@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { CreateUser } from '@users/application/create/CreateUser'
-import type { CreateUserCommand } from '@users/application/create/CreateUserCommand'
+
 import { UserRepositoryMock } from './UserRepositoryMock'
 import { UserMother } from '../domain/mothers/UserMother'
 import { isUserPasswordValid } from '../../../../modules/users/domain/validations/UserPassword';
+import { CreateUser, CreateUserCommand } from '../../../../modules/users/application/users/create/createUser';
 
 describe('CreateUser use case', () => {
     let repo: UserRepositoryMock

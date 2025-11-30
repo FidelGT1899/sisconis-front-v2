@@ -1,9 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import { UpdateUser } from '@users/application/update/UpdateUser'
-import type { UpdateUserCommand } from '@users/application/update/UpdateUserCommand'
-
+import { describe, it, expect, beforeEach } from 'vitest';
 import { UserMother } from '../domain/mothers/UserMother'
 import { UserRepositoryMock } from './UserRepositoryMock';
+import { UpdateUserCommand, UpdateUser } from '../../../../modules/users/application/users/update/updateUser';
 
 describe('UpdateUser use case', () => {
     let repo: UserRepositoryMock

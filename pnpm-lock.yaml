@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@tailwindcss/vite':
+        specifier: ^4.1.17
+        version: 4.1.17(vite@7.2.4(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2))
       canvas-confetti:
         specifier: ^1.9.4
         version: 1.9.4
@@ -20,6 +23,9 @@ importers:
       pinia:
         specifier: ^3.0.3
         version: 3.0.4(typescript@5.9.3)(vue@3.5.24(typescript@5.9.3))
+      tailwindcss:
+        specifier: ^4.1.17
+        version: 4.1.17
       vue:
         specifier: ^3.5.22
         version: 3.5.24(typescript@5.9.3)
@@ -30,9 +36,6 @@ importers:
       '@prettier/plugin-oxc':
         specifier: ^0.0.4
         version: 0.0.4
-      '@tailwindcss/vite':
-        specifier: ^4.1.17
-        version: 4.1.17(vite@7.2.4(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2))
       '@tsconfig/node22':
         specifier: ^22.0.2
         version: 22.0.5
@@ -87,9 +90,6 @@ importers:
       prettier:
         specifier: 3.6.2
         version: 3.6.2
-      tailwindcss:
-        specifier: ^4.1.17
-        version: 4.1.17
       typescript:
         specifier: ~5.9.0
         version: 5.9.3

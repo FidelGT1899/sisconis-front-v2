@@ -22,6 +22,7 @@ export class UserListMapper {
                 id: u.id,
                 fullName: `${u.name} ${u.lastname}`,
                 email: u.email,
+                dni: u.dni,
                 roleName: role?.name ?? 'Sin rol',
                 areaName: area?.name ?? 'Sin área',
                 departmentName: dept?.name ?? 'Sin departamento',
