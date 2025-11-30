@@ -9,10 +9,6 @@ describe('CreateUser use case', () => {
     let repo: UserRepositoryMock
     let useCase: CreateUser
 
-    const VALID_ID_1 = '123e4567-e89b-12d3-a456-426614174000'
-    const VALID_ID_2 = '123e4567-e89b-12d3-a456-426614174001'
-    const VALID_ID_3 = '123e4567-e89b-12d3-a456-426614174002'
-
     beforeEach(() => {
         repo = new UserRepositoryMock()
         useCase = new CreateUser(repo)
