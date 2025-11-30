@@ -121,9 +121,10 @@ export const useUsersStore = defineStore('users', () => {
         loading.value = true
         error.value = null
         try {
-            await createUserUseCase.execute(payload)
+            const { email, hashPass } = await createUserUseCase.execute(payload)
             await loadUsers()
             notifications.success('Usuario creado correctamente 🎉', { withConfetti: true })
+            return { email, hashPass }
         } catch (e: unknown) {
             const msg = getErrorMessage(e, 'Error creando usuario')
             notifications.error(msg)

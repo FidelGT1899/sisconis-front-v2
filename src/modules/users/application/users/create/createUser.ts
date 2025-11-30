@@ -17,7 +17,6 @@ export class CreateUser {
 
   async execute(command: CreateUserCommand): Promise<User> {
     const hashPass = this.generatePassword(command.dni, command.name, command.lastname)
-    console.log(hashPass);
 
     if (!isUserPasswordValid(hashPass)) {
       throw UserPasswordNotValidError()

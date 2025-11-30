@@ -12,6 +12,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'created'): void
+    (e: 'credentialsGenerated', payload: { email: string; password: string }): void
 }>()
 
 const usersStore = useUsersStore()
@@ -23,7 +24,6 @@ const email = ref('')
 const dni = ref('')
 const roleId = ref(props.roles[0]?.id ?? '')
 const areaId = ref(props.areas[0]?.id ?? '')
-const password = ref('')
 
 const loading = ref(false)
 const error = ref<string | null>(null)
@@ -42,7 +42,6 @@ function resetForm() {
     name.value = ''
     lastname.value = ''
     email.value = ''
-    password.value = ''
     dni.value = ''
     roleId.value = props.roles[0]?.id ?? 'role-1'
     areaId.value = props.areas[0]?.id ?? 'area-1'
@@ -54,7 +53,7 @@ async function handleSubmit() {
     loading.value = true
     error.value = null
     try {
-        await usersStore.createUser({
+        const result = await usersStore.createUser({
             name: name.value,
             lastname: lastname.value,
             email: email.value,
@@ -62,7 +61,14 @@ async function handleSubmit() {
             roleId: roleId.value,
             areaId: areaId.value,
         })
+
         emit('created')
+
+        emit('credentialsGenerated', {
+            email: result.email,
+            password: result.hashPass,
+        })
+
         resetForm()
         close()
     } catch (e) {
@@ -72,7 +78,6 @@ async function handleSubmit() {
     }
 }
 </script>
-
 
 <template>
     <dialog ref="dialogRef" class="modal">
@@ -122,7 +127,6 @@ async function handleSubmit() {
                         <span class="label-text">Área</span>
                     </label>
                     <select v-model="areaId" class="select select-bordered w-full">
-                        <!-- por ahora hardcodeado; luego lo sacamos de casos de uso -->
                         <option value="area-1">Sistemas</option>
                         <option value="area-2">Recursos Humanos</option>
                     </select>

@@ -8,3 +8,5 @@ export function isUserDniValid(dni: string): boolean {
 export function UserDniNotValidError(dni: string): Error {
     return new Error(`DNI ${dni} is not valid`)
 }
+
+//TODO:Validación de DNI único

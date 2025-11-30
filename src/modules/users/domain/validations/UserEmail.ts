@@ -8,3 +8,5 @@ export function isUserEmailValid(email: string): boolean {
 export function UserEmailNotValidError(email: string): Error {
     return new Error(`Email ${email} is not valid`)
 }
+
+//TODO:Validación de Email único
