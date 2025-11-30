@@ -4,6 +4,7 @@ import type { Role } from '@users/domain/entities/Role'
 import type { Area } from '@users/domain/entities/Area'
 import type { Department } from '@users/domain/entities/Department'
 import { computed, ref } from 'vue'
+import { Edit3, Trash2 } from 'lucide-vue-next'
 
 const props = defineProps<{
     users: User[]
@@ -124,15 +125,7 @@ function getDepartmentNameByAreaId(areaId: string) {
             </div>
 
             <button class="btn btn-sm btn-error" :disabled="selectedIds.length === 0" @click="handleDeleteSelected">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 6h18" />
-                    <path d="M8 6v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6" />
-                    <path d="M10 11v6" />
-                    <path d="M14 11v6" />
-                    <path d="M9 6h6" />
-                    <path d="M10 3h4l1 3H9l1-3z" />
-                </svg>
+                <Trash2 class="size-5" />
                 {{ selectedIds.length === 0 ? '' : selectedIds.length }}
             </button>
         </div>
@@ -149,6 +142,7 @@ function getDepartmentNameByAreaId(areaId: string) {
                             </label>
                         </th>
                         <th>Nombre</th>
+                        <th>DNI</th>
                         <th>Área / Depto</th>
                         <th>Email</th>
                         <th></th>
@@ -203,6 +197,10 @@ function getDepartmentNameByAreaId(areaId: string) {
                         </td>
 
                         <td>
+                            {{ user.dni }}
+                        </td>
+
+                        <td>
                             {{ getAreaName(user.areaId) }}
                             <br />
                             <span class="badge badge-ghost badge-sm">
@@ -219,26 +217,13 @@ function getDepartmentNameByAreaId(areaId: string) {
                                 <!-- Botón EDITAR -->
                                 <button class="btn btn-ghost btn-xs" type="button" @click="emit('editOne', user.id)"
                                     title="Editar usuario">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="M12 20h9" />
-                                        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
-                                    </svg>
+                                    <Edit3 class="size-5" />
                                 </button>
 
                                 <!-- Botón ELIMINAR -->
                                 <button class="btn btn-ghost btn-xs text-error" type="button"
                                     @click="emit('deleteOne', user.id)" title="Eliminar usuario">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="M3 6h18" />
-                                        <path d="M8 6v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6" />
-                                        <path d="M10 11v6" />
-                                        <path d="M14 11v6" />
-                                        <path d="M9 6l1-3h4l1 3" />
-                                    </svg>
+                                    <Trash2 class="size-5" />
                                 </button>
                             </div>
                         </td>

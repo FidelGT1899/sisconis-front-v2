@@ -1,10 +1,10 @@
 import { InMemoryUserRepository } from '@users/infrastructure/InMemoryUserRepository'
-import { getAllUsers } from '@users/application/getall/getAllUsers'
-import { CreateUser } from '@users/application/create/createUser'
-import { SearchUsersUseCase } from '@/modules/users/application/search/searchUsers'
-import { UpdateUser } from '@users/application/update/updateUser'
-import { DeleteUser } from '@users/application/delete/deleteUser'
-import { DeleteManyUsers } from '@users/application/deletemany/deleteManyUsers'
+import { getAllUsers } from '@/modules/users/application/users/getall/getAllUsers'
+import { CreateUser } from '@users/application/users/create/createUser'
+import { SearchUsersUseCase } from '@/modules/users/application/users/search/searchUsers'
+import { UpdateUser } from '@/modules/users/application/users/update/updateUser'
+import { DeleteUser } from '@/modules/users/application/users/delete/deleteUser'
+import { DeleteManyUsers } from '@/modules/users/application/users/deletemany/deleteManyUsers'
 
 // aquí eliges la implementación concreta de UserRepository
 const userRepository = new InMemoryUserRepository()

@@ -6,7 +6,7 @@ export function mapUserErrorToMessage(err: unknown): string {
     const msg = err.message
 
     if (msg.includes('Name') && msg.includes('is not valid')) {
-        return 'El nombre debe tener entre 5 y 60 caracteres.'
+        return 'El nombre debe tener entre 3 y 60 caracteres.'
     }
 
     if (msg.includes('Lastname') && msg.includes('is not valid')) {
