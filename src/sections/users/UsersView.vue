@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import UsersTable from './components/UsersTable.vue'
@@ -8,6 +8,8 @@ import UserFormEdit from './components/UserFormEdit.vue'
 
 import { useUsersStore } from '@store/users/useUsersStore'
 import type { User } from '@users/domain/entities/User'
+import BaseConfirmModal from '../shared/BaseConfirmModal.vue'
+import UserCredentialsModal from './components/UserCredentialsModal.vue'
 
 const usersStore = useUsersStore()
 const {
@@ -30,6 +32,24 @@ const modalRef = ref<InstanceType<typeof UserForm> | null>(null)
 const editModalRef = ref<InstanceType<typeof UserFormEdit> | null>(null)
 const selectedUser = ref<User | null>(null)
 
+const showDeleteModal = ref(false)
+const pendingDeleteIds = ref<string[]>([])
+const deleteCount = computed(() => pendingDeleteIds.value.length)
+
+const showCredentialsModal = ref(false)
+const credentialsEmail = ref('')
+const credentialsPassword = ref('')
+
+const deleteTitle = computed(() =>
+    deleteCount.value > 1 ? 'Eliminar usuarios' : 'Eliminar usuario'
+)
+
+const deleteMessage = computed(() =>
+    deleteCount.value > 1
+        ? `Se eliminarán ${deleteCount.value} usuarios. Esta acción no se puede deshacer.`
+        : 'Se eliminará este usuario. Esta acción no se puede deshacer.'
+)
+
 function openCreateModal() {
     modalRef.value?.open()
 }
@@ -38,17 +58,46 @@ async function handleUserCreated() {
     await loadUsers()
 }
 
+function handleCredentialsGenerated(payload: { email: string; password: string }) {
+    credentialsEmail.value = payload.email
+    credentialsPassword.value = payload.password
+    showCredentialsModal.value = true
+}
+
+function handleSendCredentialsEmail() {
+    console.log(
+        'Simulando envío de credenciales a:',
+        credentialsEmail.value,
+        'pass:',
+        credentialsPassword.value,
+    )
+    // TODO: aquí en el futuro se llamara a un use case / API real
+}
+
 async function handleDeleteSelected(ids: string[]) {
     if (!ids.length) return
-    const ok = confirm(`¿Eliminar ${ids.length} usuarios seleccionados?`)
-    if (!ok) return
-    await deleteMany(ids)
+    pendingDeleteIds.value = ids
+    showDeleteModal.value = true
 }
 
 async function handleDeleteOne(id: string) {
-    const ok = confirm('¿Eliminar este usuario?')
-    if (!ok) return
-    await deleteOne(id)
+    pendingDeleteIds.value = [id]
+    showDeleteModal.value = true
+}
+
+async function confirmDelete() {
+    const ids = pendingDeleteIds.value
+    if (!ids.length) return
+
+    if (ids.length === 1) {
+        const id = ids[0]
+        if (!id) return
+        await deleteOne(id)
+    } else {
+        await deleteMany(ids)
+    }
+
+    pendingDeleteIds.value = []
 }
 
 async function handleEditOne(id: string) {
@@ -95,9 +144,16 @@ onMounted(() => {
             :departments="departments" :page="page" :pageSize="pageSize" :totalItems="totalItems" @update:page="setPage"
             @deleteSelected="handleDeleteSelected" @deleteOne="handleDeleteOne" @editOne="handleEditOne" />
 
-        <UserForm ref="modalRef" :roles="roles" :areas="areas" @created="handleUserCreated" />
+        <UserForm ref="modalRef" :roles="roles" :areas="areas" @created="handleUserCreated"
+            @credentialsGenerated="handleCredentialsGenerated" />
 
         <UserFormEdit ref="editModalRef" :user="selectedUser" :roles="roles" :areas="areas"
             @updated="handleUserUpdated" />
+
+        <BaseConfirmModal v-model="showDeleteModal" :title="deleteTitle" :message="deleteMessage"
+            confirmLabel="Eliminar" cancelLabel="Cancelar" :danger="true" @confirm="confirmDelete" />
+
+        <UserCredentialsModal v-model="showCredentialsModal" :email="credentialsEmail" :password="credentialsPassword"
+            @send-email="handleSendCredentialsEmail" />
     </div>
 </template>
