@@ -49,11 +49,6 @@ function resetForm() {
 
 defineExpose({ open })
 
-function generateTempPassword(): string {
-    // pwd temporal simple; luego lo cambias por lo que venga del backend
-    return Math.random().toString(36).slice(-10)
-}
-
 async function handleSubmit() {
     loading.value = true
     error.value = null
