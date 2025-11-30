@@ -20,6 +20,7 @@ const dialogRef = ref<HTMLDialogElement | null>(null)
 const name = ref('')
 const lastname = ref('')
 const email = ref('')
+const dni = ref('')
 const roleId = ref(props.roles[0]?.id ?? '')
 const areaId = ref(props.areas[0]?.id ?? '')
 const password = ref('')
@@ -42,6 +43,7 @@ function resetForm() {
     lastname.value = ''
     email.value = ''
     password.value = ''
+    dni.value = ''
     roleId.value = props.roles[0]?.id ?? 'role-1'
     areaId.value = props.areas[0]?.id ?? 'area-1'
 }
@@ -56,9 +58,9 @@ async function handleSubmit() {
             name: name.value,
             lastname: lastname.value,
             email: email.value,
+            dni: dni.value,
             roleId: roleId.value,
             areaId: areaId.value,
-            password: password.value,
         })
         emit('created')
         resetForm()
@@ -105,6 +107,15 @@ async function handleSubmit() {
                         placeholder="correo@ejemplo.com" required />
                 </div>
 
+                <!-- DNI -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">DNI</span>
+                    </label>
+                    <input v-model="dni" type="text" class="input input-bordered w-full" placeholder="DNI" required
+                        minlength="8" maxlength="8" />
+                </div>
+
                 <!-- Área -->
                 <div class="form-control">
                     <label class="label">
@@ -126,15 +137,6 @@ async function handleSubmit() {
                         <option value="role-1">Administrador</option>
                         <option value="role-2">Usuario</option>
                     </select>
-                </div>
-
-                <!-- Password -->
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Contraseña</span>
-                    </label>
-                    <input v-model="password" type="password" class="input input-bordered w-full" placeholder="********"
-                        required />
                 </div>
 
                 <!-- Error -->

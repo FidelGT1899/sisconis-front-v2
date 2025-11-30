@@ -20,6 +20,7 @@ const dialogRef = ref<HTMLDialogElement | null>(null)
 const name = ref('')
 const lastname = ref('')
 const email = ref('')
+const dni = ref('')
 const roleId = ref('')
 const areaId = ref('')
 const password = ref('') // opcional: si lo dejas vacío, se mantiene la actual
@@ -34,6 +35,7 @@ watch(
         name.value = u.name
         lastname.value = u.lastname
         email.value = u.email
+        dni.value = u.dni
         roleId.value = u.roleId
         areaId.value = u.areaId
         password.value = ''
@@ -69,6 +71,7 @@ async function handleSubmit() {
             name: name.value,
             lastname: lastname.value,
             email: email.value,
+            dni: dni.value,
             roleId: roleId.value,
             areaId: areaId.value,
             password: password.value || undefined,
@@ -79,7 +82,6 @@ async function handleSubmit() {
     } catch (e: unknown) {
         console.error(e)
 
-        // obtener mensaje sin usar any
         const msg =
             e instanceof Error && e.message
                 ? e.message
@@ -124,6 +126,15 @@ async function handleSubmit() {
                     </label>
                     <input v-model="email" type="email" class="input input-bordered w-full"
                         placeholder="correo@ejemplo.com" required />
+                </div>
+
+                <!-- DNI -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">DNI</span>
+                    </label>
+                    <input v-model="dni" type="text" class="input input-bordered w-full" placeholder="DNI" required
+                        minlength="8" maxlength="8" />
                 </div>
 
                 <!-- Área -->

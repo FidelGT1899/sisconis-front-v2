@@ -1,6 +1,8 @@
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export function isUserEmailValid(email: string): boolean {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return re.test(email)
+    if (!email) return false
+    return EMAIL_REGEX.test(email)
 }
 
 export function UserEmailNotValidError(email: string): Error {

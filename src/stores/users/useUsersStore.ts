@@ -63,6 +63,7 @@ export const useUsersStore = defineStore('users', () => {
                 u.name,
                 u.lastname,
                 u.email,
+                u.dni,
                 role?.name ?? '',
                 area?.name ?? '',
                 dept?.name ?? '',
@@ -113,9 +114,9 @@ export const useUsersStore = defineStore('users', () => {
         name: string
         lastname: string
         email: string
+        dni: string
         roleId: string
         areaId: string
-        password: string
     }) {
         loading.value = true
         error.value = null
@@ -137,6 +138,7 @@ export const useUsersStore = defineStore('users', () => {
         name: string
         lastname: string
         email: string
+        dni: string
         roleId: string
         areaId: string
         password?: string
@@ -180,7 +182,7 @@ export const useUsersStore = defineStore('users', () => {
         try {
             await deleteManyUsersUseCase.execute(ids)
             await loadUsers()
-            notifications.success(`Se eliminaron ${ids.length} usuarios`)
+            notifications.success(`Se eliminaron ${ids.length} usuarios 🎉`, { withConfetti: true })
         } catch (e: unknown) {
             console.error(e)
             const msg = getErrorMessage(e, 'Error eliminando usuarios')
