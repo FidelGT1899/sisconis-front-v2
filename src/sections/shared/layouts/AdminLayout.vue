@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterView } from "vue-router";
-import Navbar from "./AppNavbar.vue";
-import Sidebar from "./AppSidebar.vue";
-import AppToasts from "./AppToasts.vue";
-import AppFooter from "./AppFooter.vue";
+import Navbar from "../AppNavbar.vue";
+import Sidebar from "../AppSidebar.vue";
+import AppToasts from "../AppToasts.vue";
+import AppFooter from "../AppFooter.vue";
 
 const isSidebarPinned = ref(true); // abierto/expandido por defecto
 </script>

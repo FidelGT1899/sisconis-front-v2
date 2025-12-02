@@ -4,10 +4,10 @@ import { RouterLink, useRoute } from 'vue-router'
 import {
     LayoutDashboard,
     Users,
+    User,
     MessageCircle,
     CalendarDays,
     BarChart3,
-    Settings,
     LogOut,
 } from 'lucide-vue-next'
 
@@ -64,9 +64,9 @@ const isExpanded = computed(() => props.pinned || isHover.value)
                 <!-- DASHBOARD -->
                 <li :class="{
                     'bg-base-300 border-l-4 border-primary font-semibold':
-                        isActive('/dashboard'),
+                        isActive('/admin/dashboard'),
                 }">
-                    <RouterLink to="/dashboard" class="flex items-center gap-3 tooltip tooltip-right"
+                    <RouterLink to="/admin/dashboard" class="flex items-center gap-3 tooltip tooltip-right"
                         :data-tip="!isExpanded ? 'Dashboard' : ''">
                         <LayoutDashboard class="size-5" />
                         <span v-if="isExpanded">Dashboard</span>
@@ -76,9 +76,9 @@ const isExpanded = computed(() => props.pinned || isHover.value)
                 <!-- USUARIOS -->
                 <li :class="{
                     'bg-base-300 border-l-4 border-primary font-semibold':
-                        isActive('/users'),
+                        $route.path === '/admin/users'
                 }">
-                    <RouterLink to="/users" class="flex items-center gap-3 tooltip tooltip-right"
+                    <RouterLink :to="{ name: 'users' }" class="flex items-center gap-3 tooltip tooltip-right"
                         :data-tip="!isExpanded ? 'Usuarios' : ''">
                         <Users class="size-5" />
                         <span v-if="isExpanded">Usuarios</span>
@@ -88,9 +88,9 @@ const isExpanded = computed(() => props.pinned || isHover.value)
                 <!-- MENSAJES -->
                 <li :class="{
                     'bg-base-300 border-l-4 border-primary font-semibold':
-                        isActive('/messages'),
+                        isActive('/admin/messages'),
                 }">
-                    <RouterLink to="/messages" class="flex items-center gap-3 tooltip tooltip-right"
+                    <RouterLink to="/admin/messages" class="flex items-center gap-3 tooltip tooltip-right"
                         :data-tip="!isExpanded ? 'Mensajes' : ''">
                         <MessageCircle class="size-5" />
                         <span v-if="isExpanded">Mensajes</span>
@@ -100,9 +100,9 @@ const isExpanded = computed(() => props.pinned || isHover.value)
                 <!-- CALENDARIO -->
                 <li :class="{
                     'bg-base-300 border-l-4 border-primary font-semibold':
-                        isActive('/calendar'),
+                        isActive('/admin/calendar'),
                 }">
-                    <RouterLink to="/calendar" class="flex items-center gap-3 tooltip tooltip-right"
+                    <RouterLink to="/admin/calendar" class="flex items-center gap-3 tooltip tooltip-right"
                         :data-tip="!isExpanded ? 'Calendario' : ''">
                         <CalendarDays class="size-5" />
                         <span v-if="isExpanded">Calendario</span>
@@ -112,9 +112,9 @@ const isExpanded = computed(() => props.pinned || isHover.value)
                 <!-- REPORTES -->
                 <li :class="{
                     'bg-base-300 border-l-4 border-primary font-semibold':
-                        isActive('/reports'),
+                        isActive('/admin/reports'),
                 }">
-                    <RouterLink to="/reports" class="flex items-center gap-3 tooltip tooltip-right"
+                    <RouterLink to="/admin/reports" class="flex items-center gap-3 tooltip tooltip-right"
                         :data-tip="!isExpanded ? 'Reportes' : ''">
                         <BarChart3 class="size-5" />
                         <span v-if="isExpanded">Reportes</span>
@@ -126,12 +126,12 @@ const isExpanded = computed(() => props.pinned || isHover.value)
             <ul class="menu w-full px-1 pt-2 border-t border-base-300">
                 <li :class="{
                     'bg-base-300 border-l-4 border-primary font-semibold':
-                        isActive('/settings'),
+                        isActive('/admin/users/profile'),
                 }">
-                    <RouterLink to="/settings" class="flex items-center gap-3 tooltip tooltip-right"
+                    <RouterLink to="/admin/users/profile" class="flex items-center gap-3 tooltip tooltip-right"
                         :data-tip="!isExpanded ? 'Ajustes' : ''">
-                        <Settings class="size-5" />
-                        <span v-if="isExpanded">Ajustes</span>
+                        <User class="size-5" />
+                        <span v-if="isExpanded">Perfil</span>
                     </RouterLink>
                 </li>
 

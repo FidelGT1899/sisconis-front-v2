@@ -90,7 +90,11 @@ const emit = defineEmits<{
                         <p class="font-semibold text-sm">John Doe</p>
                         <p class="text-xs opacity-60">Admin</p>
                     </li>
-                    <li><a>Perfil</a></li>
+                    <li>
+                        <RouterLink to="/admin/users/profile" class="flex items-center gap-3 tooltip tooltip-right">
+                            Perfil
+                        </RouterLink>
+                    </li>
                     <li><a>Configuración</a></li>
                     <li><a>Cerrar sesión</a></li>
                 </ul>
